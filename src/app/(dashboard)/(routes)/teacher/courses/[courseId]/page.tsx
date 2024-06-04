@@ -6,6 +6,8 @@ import db from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
 import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
+import CategoryForm from "@/components/course/Category-form";
+
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -29,8 +31,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
       name: "asc",
     },
   });
-
-  console.log(categories);
 
   const requiredFields = [
     course.title,
@@ -64,6 +64,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
           <TitileForm initialData={course} courseId={course.id} />
           <DescriptionForm initialData={course} courseId={course.id} />
           <ImageForm initialData={course} courseId={course.id} />
+          <CategoryForm
+            initialData={course}
+            courseId={course.id}
+            options={categories.map((category) => ({
+              label: category.name,
+              value: category.id,
+            }))}
+          />
         </div>
       </div>
     </div>
