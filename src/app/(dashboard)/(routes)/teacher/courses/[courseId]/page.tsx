@@ -7,6 +7,7 @@ import { auth } from "@clerk/nextjs/server";
 import { CircleDollarSign, LayoutDashboard, ListChecks } from "lucide-react";
 import { redirect } from "next/navigation";
 import CategoryForm from "@/components/course/Category-form";
+import PriceForm from "@/components/course/Price-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -85,6 +86,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <IconBadge icon={CircleDollarSign} />
               <h2 className="text-xl">Sell your course</h2>
             </div>
+            <PriceForm initialData={course} courseId={course.id} />
           </div>
         </div>
       </div>
