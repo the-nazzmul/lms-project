@@ -1,13 +1,20 @@
-import DescriptionForm from "@/components/course/Description-form";
-import TitileForm from "@/components/course/Titile-form";
-import ImageForm from "@/components/course/Image-form";
+import DescriptionForm from "@/components/course/description-form";
+import TitileForm from "@/components/course/titile-form";
+import ImageForm from "@/components/course/image-form";
+import CategoryForm from "@/components/course/category-form";
+import PriceForm from "@/components/course/price-form";
+import AttachmentForm from "@/components/course/attachment-form";
+
+import { redirect } from "next/navigation";
 import { IconBadge } from "@/components/icon-badge";
 import db from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
-import { CircleDollarSign, LayoutDashboard, ListChecks } from "lucide-react";
-import { redirect } from "next/navigation";
-import CategoryForm from "@/components/course/Category-form";
-import PriceForm from "@/components/course/Price-form";
+import {
+  CircleDollarSign,
+  File,
+  LayoutDashboard,
+  ListChecks,
+} from "lucide-react";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -19,6 +26,13 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
+    },
+    include: {
+      attachments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
 
@@ -87,6 +101,13 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <h2 className="text-xl">Sell your course</h2>
             </div>
             <PriceForm initialData={course} courseId={course.id} />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={File} />
+              <h2 className="text-xl">Resources & Attachments</h2>
+            </div>
+            <AttachmentForm initialData={course} courseId={course.id} />
           </div>
         </div>
       </div>
