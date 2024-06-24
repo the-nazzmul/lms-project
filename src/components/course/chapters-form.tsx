@@ -15,13 +15,13 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pencil, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
 import { Chapter, Course } from "@prisma/client";
+import ChaptersList from "../chapters/chapters-list";
 
 interface IChaptersForm {
   initialData: Course & { chapters: Chapter[] };
@@ -53,7 +53,7 @@ const ChaptersForm = ({ initialData, courseId }: IChaptersForm) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters`, values);
-      toast.success("Course created!");
+      toast.success("Chapter created!");
       toggleCreating();
       router.refresh();
     } catch {
@@ -64,10 +64,11 @@ const ChaptersForm = ({ initialData, courseId }: IChaptersForm) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course chapter
+        Course chapters
         <Button onClick={toggleCreating} variant="ghost">
-          {isCreating && <>Cancel</>}
-          {!isCreating && (
+          {isCreating ? (
+            <>Cancel</>
+          ) : (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
               Add a chapter
@@ -105,6 +106,7 @@ const ChaptersForm = ({ initialData, courseId }: IChaptersForm) => {
           </form>
         </Form>
       )}
+      
       {!isCreating && (
         <div
           className={cn(
@@ -114,13 +116,17 @@ const ChaptersForm = ({ initialData, courseId }: IChaptersForm) => {
         >
           {!initialData.chapters.length && "No chapters"}
           {
-            // Todo: add a list of chapters
+            <ChaptersList
+              onEdit={() => {}}
+              onReorder={() => {}}
+              items={initialData.chapters}
+            />
           }
         </div>
       )}
       {!isCreating && (
         <p className="text-xs text-muted-foreground mt-4">
-          Dreag and drop to reorder the chapters
+          Drag and drop to reorder the chapters
         </p>
       )}
     </div>
