@@ -21,17 +21,22 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  title: z.string().min(1, { message: "Title is required" }),
+  title: z.string().min(1),
 });
 
-interface ITitleFormProps {
+interface IChapterTitleFormProps {
   initialData: {
     title: string;
   };
   courseId: string;
+  chapterId: string;
 }
 
-const TitleForm = ({ initialData, courseId }: ITitleFormProps) => {
+const ChapterTitleForm = ({
+  initialData,
+  courseId,
+  chapterId,
+}: IChapterTitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
@@ -48,8 +53,8 @@ const TitleForm = ({ initialData, courseId }: ITitleFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated!");
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
+      toast.success("Chapter updated!");
       toggleEdit();
       router.refresh();
     } catch {
@@ -60,7 +65,7 @@ const TitleForm = ({ initialData, courseId }: ITitleFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course title
+        Chapter title
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && <>Cancel</>}
           {!isEditing && (
@@ -86,7 +91,7 @@ const TitleForm = ({ initialData, courseId }: ITitleFormProps) => {
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
+                      placeholder="e.g. 'Introdiction to the course'"
                       {...field}
                     />
                   </FormControl>
@@ -106,4 +111,4 @@ const TitleForm = ({ initialData, courseId }: ITitleFormProps) => {
   );
 };
 
-export default TitleForm;
+export default ChapterTitleForm;

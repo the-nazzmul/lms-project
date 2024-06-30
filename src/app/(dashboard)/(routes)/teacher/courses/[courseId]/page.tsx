@@ -1,5 +1,5 @@
 import DescriptionForm from "@/components/course/description-form";
-import TitileForm from "@/components/course/titile-form";
+
 import ImageForm from "@/components/course/image-form";
 import CategoryForm from "@/components/course/category-form";
 import PriceForm from "@/components/course/price-form";
@@ -16,6 +16,7 @@ import {
   ListChecks,
 } from "lucide-react";
 import ChaptersForm from "@/components/course/chapters-form";
+import TitleForm from "@/components/course/titile-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
@@ -59,7 +60,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.imageUrl,
     course.price,
     course.categoryId,
-    course.chapters.some(chapter=>chapter.isPublished)
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;
@@ -83,7 +84,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <IconBadge icon={LayoutDashboard} />
             <h2 className="text-xl">Customize your course</h2>
           </div>
-          <TitileForm initialData={course} courseId={course.id} />
+          <TitleForm initialData={course} courseId={course.id} />
           <DescriptionForm initialData={course} courseId={course.id} />
           <ImageForm initialData={course} courseId={course.id} />
           <CategoryForm
