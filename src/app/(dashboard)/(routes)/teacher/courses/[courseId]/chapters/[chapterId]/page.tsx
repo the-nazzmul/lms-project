@@ -1,3 +1,4 @@
+import ChapterDescriptionForm from "@/components/chapters/chapter-description-form";
 import ChapterTitleForm from "@/components/chapters/chapter-titile-form";
 import { IconBadge } from "@/components/icon-badge";
 import db from "@/lib/prismadb";
@@ -66,6 +67,11 @@ const ChapterIdPage = async ({
               <h2 className="text-xl">Customize your chapter</h2>
             </div>
             <ChapterTitleForm
+              initialData={chapter}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
+            />
+            <ChapterDescriptionForm
               initialData={chapter}
               courseId={params.courseId}
               chapterId={params.chapterId}
